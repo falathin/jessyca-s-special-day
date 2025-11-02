@@ -1,6 +1,6 @@
 // 🩵 Fungsi hover ke semua tombol SweetAlert
 function addHoverEffect() {
-    const buttons = document.querySelectorAll('.swal2-confirm, .swal2-deny, .swal2-cancel');
+    const buttons = document.querySelectorAll('.swal2-confirm, .swal2-deny, .swal2-cancel, .swal2-extra');
     buttons.forEach((btn) => {
         btn.style.transition = 'all 0.25s ease';
 
@@ -17,6 +17,10 @@ function addHoverEffect() {
                 btn.style.background = '#ff5f5f';
                 btn.style.transform = 'scale(1.07)';
                 btn.style.boxShadow = '0 0 12px rgba(255,95,95,0.6)';
+            } else if (btn.classList.contains('swal2-extra')) {
+                btn.style.background = '#ff9f43';
+                btn.style.transform = 'scale(1.07)';
+                btn.style.boxShadow = '0 0 12px rgba(255,159,67,0.6)';
             }
         });
 
@@ -27,6 +31,8 @@ function addHoverEffect() {
                 btn.style.background = '#9d58ff';
             } else if (btn.classList.contains('swal2-cancel')) {
                 btn.style.background = '#d33';
+            } else if (btn.classList.contains('swal2-extra')) {
+                btn.style.background = '#ff851b';
             }
             btn.style.transform = 'scale(1)';
             btn.style.boxShadow = 'none';
@@ -34,58 +40,65 @@ function addHoverEffect() {
     });
 }
 
-// Step 1: Choose your photo (aktif hanya setelah 8 Feb 2026, 12:00 PM)
+// Step 1: Pilih foto (aktif setelah 8 Feb 2026)
 function choosePhoto() {
     Swal.fire({
         title: 'Choose your photo style <br> (˶˃ ᵕ ˂˶)',
         html: `
             <p style="font-size:14px; color:#555; line-height:1.6; margin-top:6px;">
-                Would you like to use your own cute photo or an anime one? :3<br>
-                （あなたの可愛い写真？それともアニメの？）
+                Which photo do you want to use? :3<br>
+                （どの写真を使いたい？）<br><br>
+                <button id="btnMyPhoto" class="swal2-styled swal2-confirm" style="margin:4px;">My Photo (⁄ ⁄>⁄ ▽ ⁄<⁄ ⁄)</button>
+                <button id="btnAnimePhoto" class="swal2-styled swal2-deny" style="margin:4px;">Anime Photo ❤︎</button>
+                <button id="btnCitlaliPhoto" class="swal2-styled swal2-extra" style="background:#ff851b; margin:4px;">Citlali Photo 🌼</button>
             </p>
         `,
-        icon: 'info',
-        showDenyButton: true,
-        confirmButtonText: 'My Photo (⁄ ⁄>⁄ ▽ ⁄<⁄ ⁄)',
-        denyButtonText: 'Anime Photo ❤︎',
-        confirmButtonColor: '#3085d6',
-        denyButtonColor: '#9d58ff',
+        showConfirmButton: false,
         background: '#fffefc',
-        customClass: {
-            popup: 'swal2-border-radius-xl'
-        }
-    }).then((choice) => {
-        const image = document.getElementById('imagePath');
+        customClass: { popup: 'swal2-border-radius-xl' },
+        didOpen: () => {
+            const image = document.getElementById('imagePath');
 
-        if (choice.isConfirmed && image) {
-            image.src = './img/cika.jpg';
-            playMusicOption();
-        } else if (choice.isDenied && image) {
-            Swal.fire({
-                title: 'Are you sure?',
-                html: `Do you want to use the anime photo instead?<br>(๑•﹏•)`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#9d58ff',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, I\'m sure ❤︎',
-                cancelButtonText: 'Go back! (⁄ ⁄>⁄ ▽ ⁄<⁄ ⁄)',
-                background: '#fffefc',
-                customClass: { popup: 'swal2-border-radius-xl' }
-            }).then((confirmAnime) => {
-                if (confirmAnime.isConfirmed) {
-                    image.src = './img/anime.jpg';
-                    playMusicOption();
-                } else {
-                    choosePhoto();
-                }
+            // --- Pilih My Photo
+            document.getElementById('btnMyPhoto').addEventListener('click', () => {
+                if (image) image.src = './img/cika.jpg';
+                playMusicOption();
+                Swal.close();
+            });
+
+            // --- Pilih Anime Photo
+            document.getElementById('btnAnimePhoto').addEventListener('click', () => {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    html: `Do you want to use the anime photo instead?<br>(๑•﹏•)`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#9d58ff',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, use it ❤︎',
+                    cancelButtonText: 'Go back!',
+                    background: '#fffefc',
+                    customClass: { popup: 'swal2-border-radius-xl' }
+                }).then((confirmAnime) => {
+                    if (confirmAnime.isConfirmed && image) {
+                        image.src = './img/anime.jpg';
+                        playMusicOption();
+                    } else {
+                        choosePhoto();
+                    }
+                });
+            });
+
+            // --- Pilih Citlali Photo
+            document.getElementById('btnCitlaliPhoto').addEventListener('click', () => {
+                if (image) image.src = './img/citlali.jpg';
+                playMusicOption();
+                Swal.close();
             });
         }
-
-        setTimeout(() => addHoverEffect(), 100);
     });
 
-    setTimeout(() => addHoverEffect(), 100);
+    setTimeout(() => addHoverEffect(), 150);
 }
 
 // Step 2: Music option
@@ -119,14 +132,13 @@ function playMusicOption() {
 // 🕒 Cek waktu sekarang
 const now = new Date();
 const unlockTime = new Date('2026-02-08T12:00:00+07:00'); // 8 Feb 2026, 12:00 PM WIB
-
 const image = document.getElementById('imagePath');
 
 if (now >= unlockTime) {
-    // Kalau sudah lewat waktunya → tampilkan fitur pilih foto
+    // Sudah waktunya → bisa pilih foto (termasuk Citlali)
     choosePhoto();
 } else {
-    // Sebelum tanggal itu → langsung pakai cika.jpg & lanjut ke musik
+    // Belum waktunya → langsung pakai cika.jpg & lanjut ke musik
     if (image) image.src = './img/cika.jpg';
     playMusicOption();
 }
