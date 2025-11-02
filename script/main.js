@@ -1,100 +1,3 @@
-// Step 1: Choose your photo
-function choosePhoto() {
-    Swal.fire({
-        title: 'Choose your photo style <br> (˶˃ ᵕ ˂˶)',
-        html: `
-            <p style="font-size:14px; color:#555; line-height:1.6; margin-top:6px;">
-                Would you like to use your own cute photo or an anime one? :3<br>
-                （あなたの可愛い写真？それともアニメの？）
-            </p>
-        `,
-        icon: 'info',
-        showDenyButton: true,
-        confirmButtonText: 'My Photo (⁄ ⁄>⁄ ▽ ⁄<⁄ ⁄)',
-        denyButtonText: 'Anime Photo ❤︎',
-        confirmButtonColor: '#3085d6',
-        denyButtonColor: '#9d58ff',
-        background: '#fffefc',
-        customClass: {
-            popup: 'swal2-border-radius-xl'
-        }
-    }).then((choice) => {
-        const image = document.getElementById('imagePath');
-
-        // --- Jika pilih "My Photo"
-        if (choice.isConfirmed && image) {
-            image.src = './img/cika.jpg';
-            playMusicOption();
-        }
-
-        // --- Jika pilih "Anime Photo"
-        else if (choice.isDenied && image) {
-        Swal.fire({
-            title: 'Are you sure?',
-            html: `
-                Do you want to use the anime photo instead?<br>
-                (๑•﹏•)
-            `,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#9d58ff',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, I\'m sure ❤︎',
-            cancelButtonText: 'Go back! (⁄ ⁄>⁄ ▽ ⁄<⁄ ⁄)',
-            background: '#fffefc',
-            customClass: {
-                popup: 'swal2-border-radius-xl'
-            }
-        }).then((confirmAnime) => {
-                if (confirmAnime.isConfirmed) {
-                    image.src = './img/anime.jpg';
-                    playMusicOption();
-                } else {
-                    // Balik ke step awal
-                    choosePhoto();
-                }
-            });
-        }
-
-        // Tambahkan hover ke semua tombol SweetAlert
-        setTimeout(() => addHoverEffect(), 100);
-    });
-
-    // Tambahkan hover setelah popup muncul
-    setTimeout(() => addHoverEffect(), 100);
-}
-
-// Step 2: Music option
-function playMusicOption() {
-    Swal.fire({
-        title: 'Play background music? <br> (⁄ ⁄>⁄ ▽ ⁄<⁄ ⁄)',
-        html: `
-            <p style="font-size:14px; color:#555; line-height:1.6; margin-top:6px;">
-                Best experience on PC or laptop ♪<br>
-                （でもスマホでもだいじょうぶだよ！）<br><br>
-                <span style="font-size:12px; color:#aaa;">by <b>@i.a.falathin</b></span>
-            </p>
-        `,
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Play Music ♫',
-        cancelButtonText: 'No Music :3',
-        background: '#fffefc',
-        customClass: {
-            popup: 'swal2-border-radius-xl'
-        }
-    }).then((result) => {
-        const song = document.querySelector('.song');
-        if (result.isConfirmed && song) song.play();
-        animationTimeline();
-    });
-
-    // Hover effect juga di sini
-    setTimeout(() => addHoverEffect(), 100);
-}
-
 // 🩵 Fungsi hover ke semua tombol SweetAlert
 function addHoverEffect() {
     const buttons = document.querySelectorAll('.swal2-confirm, .swal2-deny, .swal2-cancel');
@@ -131,8 +34,102 @@ function addHoverEffect() {
     });
 }
 
-// Jalankan langkah awal
-choosePhoto();
+// Step 1: Choose your photo (aktif hanya setelah 8 Feb 2026, 12:00 PM)
+function choosePhoto() {
+    Swal.fire({
+        title: 'Choose your photo style <br> (˶˃ ᵕ ˂˶)',
+        html: `
+            <p style="font-size:14px; color:#555; line-height:1.6; margin-top:6px;">
+                Would you like to use your own cute photo or an anime one? :3<br>
+                （あなたの可愛い写真？それともアニメの？）
+            </p>
+        `,
+        icon: 'info',
+        showDenyButton: true,
+        confirmButtonText: 'My Photo (⁄ ⁄>⁄ ▽ ⁄<⁄ ⁄)',
+        denyButtonText: 'Anime Photo ❤︎',
+        confirmButtonColor: '#3085d6',
+        denyButtonColor: '#9d58ff',
+        background: '#fffefc',
+        customClass: {
+            popup: 'swal2-border-radius-xl'
+        }
+    }).then((choice) => {
+        const image = document.getElementById('imagePath');
+
+        if (choice.isConfirmed && image) {
+            image.src = './img/cika.png';
+            playMusicOption();
+        } else if (choice.isDenied && image) {
+            Swal.fire({
+                title: 'Are you sure?',
+                html: `Do you want to use the anime photo instead?<br>(๑•﹏•)`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#9d58ff',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, I\'m sure ❤︎',
+                cancelButtonText: 'Go back! (⁄ ⁄>⁄ ▽ ⁄<⁄ ⁄)',
+                background: '#fffefc',
+                customClass: { popup: 'swal2-border-radius-xl' }
+            }).then((confirmAnime) => {
+                if (confirmAnime.isConfirmed) {
+                    image.src = './img/anime.jpg';
+                    playMusicOption();
+                } else {
+                    choosePhoto();
+                }
+            });
+        }
+
+        setTimeout(() => addHoverEffect(), 100);
+    });
+
+    setTimeout(() => addHoverEffect(), 100);
+}
+
+// Step 2: Music option
+function playMusicOption() {
+    Swal.fire({
+        title: 'Play background music? <br> (⁄ ⁄>⁄ ▽ ⁄<⁄ ⁄)',
+        html: `
+            <p style="font-size:14px; color:#555; line-height:1.6; margin-top:6px;">
+                Best experience on PC or laptop ♪<br>
+                （でもスマホでもだいじょうぶだよ！）<br><br>
+                <span style="font-size:12px; color:#aaa;">by <b>@i.a.falathin</b></span>
+            </p>
+        `,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Play Music ♫',
+        cancelButtonText: 'No Music :3',
+        background: '#fffefc',
+        customClass: { popup: 'swal2-border-radius-xl' }
+    }).then((result) => {
+        const song = document.querySelector('.song');
+        if (result.isConfirmed && song) song.play();
+        animationTimeline();
+    });
+
+    setTimeout(() => addHoverEffect(), 100);
+}
+
+// 🕒 Cek waktu sekarang
+const now = new Date();
+const unlockTime = new Date('2026-02-08T12:00:00+07:00'); // 8 Feb 2026, 12:00 PM WIB
+
+const image = document.getElementById('imagePath');
+
+if (now >= unlockTime) {
+    // Kalau sudah lewat waktunya → tampilkan fitur pilih foto
+    choosePhoto();
+} else {
+    // Sebelum tanggal itu → langsung pakai cika.png & lanjut ke musik
+    if (image) image.src = './img/cika.png';
+    playMusicOption();
+}
 
 // animation timeline
 const animationTimeline = () => {
