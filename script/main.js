@@ -58,7 +58,7 @@ function choosePhoto() {
         const image = document.getElementById('imagePath');
 
         if (choice.isConfirmed && image) {
-            image.src = './img/cika.png';
+            image.src = './img/cika.jpg';
             playMusicOption();
         } else if (choice.isDenied && image) {
             Swal.fire({
@@ -126,8 +126,8 @@ if (now >= unlockTime) {
     // Kalau sudah lewat waktunya → tampilkan fitur pilih foto
     choosePhoto();
 } else {
-    // Sebelum tanggal itu → langsung pakai cika.png & lanjut ke musik
-    if (image) image.src = './img/cika.png';
+    // Sebelum tanggal itu → langsung pakai cika.jpg & lanjut ke musik
+    if (image) image.src = './img/cika.jpg';
     playMusicOption();
 }
 
