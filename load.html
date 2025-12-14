@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Memuat…</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+html,body{
+  height:100%;
+  font-family:Inter,system-ui;
+}
+
+/* =====================
+   THEME VARIABLES
+===================== */
+:root{
+  --bg-1:#eef2ff;
+  --bg-2:#fef9c3;
+  --card:#ffffff;
+  --accent:#3b82f6;
+  --accent-soft:#dbeafe;
+}
+
+/* late theme */
+.theme-late{
+  --bg-1:#ffe4e6;
+  --bg-2:#fce7f3;
+  --card:#fff1f2;
+  --accent:#ec4899;
+  --accent-soft:#fbcfe8;
+}
+
+/* =====================
+   BACKGROUND
+===================== */
+body{
+  background:linear-gradient(120deg,var(--bg-1),var(--bg-2));
+  background-size:200% 200%;
+  animation:bgMove 10s ease infinite;
+  transition:background 900ms ease;
+}
+
+@keyframes bgMove{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+
+/* =====================
+   PAGE ANIMATION
+===================== */
+.page-enter{
+  opacity:0;
+  transform:translateY(10px) scale(.98);
+  animation:pageIn .7s ease forwards;
+}
+@keyframes pageIn{
+  to{opacity:1;transform:none}
+}
+.page-exit{
+  opacity:0;
+  transform:scale(.97);
+  transition:all .7s ease;
+}
+
+/* =====================
+   CARD + UI
+===================== */
+.card{
+  background:var(--card);
+  transition:background 800ms ease;
+}
+
+.icon-wrap{
+  background:var(--accent-soft);
+  transition:background 800ms ease;
+}
+
+.btn-primary{
+  background:var(--accent);
+  transition:background 800ms ease;
+}
+
+.progress-early{
+  background:linear-gradient(90deg,#3b82f6,#facc15);
+}
+.progress-late{
+  background:linear-gradient(90deg,#ec4899,#f43f5e);
+}
+.progress{
+  transition:width .12s linear, background .8s ease;
+}
+</style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center p-6">
+
+<main id="app" class="page-enter w-full max-w-xl">
+<section class="card backdrop-blur rounded-2xl shadow-xl p-8 border">
+
+<!-- HEADER -->
+<div class="flex gap-4 items-center">
+  <div class="icon-wrap w-14 h-14 rounded-xl flex items-center justify-center shadow-inner">
+    <!-- cake svg -->
+    <svg width="40" height="40" viewBox="0 0 64 64">
+      <rect x="30" y="6" width="4" height="12" rx="2" fill="#f43f5e"/>
+      <path d="M32 2c2 2 2 4 0 6c-2-2-2-4 0-6z" fill="#f59e0b"/>
+      <rect x="14" y="18" width="36" height="12" rx="6" fill="#fbcfe8"/>
+      <rect x="12" y="30" width="40" height="14" rx="6" fill="#f9a8d4"/>
+      <rect x="10" y="44" width="44" height="12" rx="6" fill="#ec4899"/>
+      <ellipse cx="32" cy="58" rx="22" ry="4" fill="#e5e7eb"/>
+    </svg>
+  </div>
+
+  <div>
+    <h1 class="text-lg font-semibold text-slate-800">
+      Sedang memuat surat ucapan
+    </h1>
+    <p class="text-sm text-slate-500">
+      Disiapkan dengan penuh perhatian ✨
+    </p>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="mt-6">
+  <div class="w-full h-3 bg-slate-100 rounded-full overflow-hidden">
+    <div id="progressBar" class="progress progress-early h-3 rounded-full" style="width:0%"></div>
+  </div>
+
+  <div class="mt-3 flex justify-between text-sm text-slate-600">
+    <span><span id="percent">0%</span> selesai</span>
+    <span><span id="countdown">10</span> detik</span>
+  </div>
+</div>
+
+<!-- BUTTONS -->
+<div class="mt-6 flex justify-end gap-3">
+  <button id="skip" class="px-4 py-2 border rounded-md text-sm">
+    Lewati
+  </button>
+  <button id="replay" class="btn-primary text-white px-4 py-2 rounded-md text-sm">
+    Ulangi
+  </button>
+</div>
+
+</section>
+</main>
+
+<script>
+(() => {
+const TOTAL = 10;
+const TICK = 100;
+let elapsed = 0, timer;
+
+const bar = document.getElementById("progressBar");
+const percent = document.getElementById("percent");
+const cd = document.getElementById("countdown");
+const body = document.body;
+const app = document.getElementById("app");
+
+function applyTheme(p){
+  if(p > 50){
+    body.classList.add("theme-late");
+    bar.classList.remove("progress-early");
+    bar.classList.add("progress-late");
+  }else{
+    body.classList.remove("theme-late");
+    bar.classList.add("progress-early");
+    bar.classList.remove("progress-late");
+  }
+}
+
+function start(){
+  elapsed = 0;
+  clearInterval(timer);
+
+  timer = setInterval(()=>{
+    elapsed += TICK/1000;
+    const r = Math.min(elapsed/TOTAL,1);
+    const p = Math.round(r*100);
+
+    bar.style.width = p+"%";
+    percent.textContent = p+"%";
+    cd.textContent = Math.max(0,Math.ceil(TOTAL-elapsed));
+
+    applyTheme(p);
+
+    if(r>=1){
+      clearInterval(timer);
+      app.classList.add("page-exit");
+      setTimeout(()=>location.href="aqsa-main/index.html",700);
+    }
+  },TICK);
+}
+
+document.getElementById("skip").onclick=()=>{
+  clearInterval(timer);
+  app.classList.add("page-exit");
+  setTimeout(()=>location.href="aqsa-main/index.html",700);
+};
+
+document.getElementById("replay").onclick=start;
+
+start();
+})();
+</script>
+
+</body>
+</html>
